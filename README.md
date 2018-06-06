@@ -1,5 +1,5 @@
 # PureCSS - Runcloud Logo
-Runcloud logo using HTML and CSS
+Responsive Runcloud logo using HTML and CSS
 
 [Visit Runcloud website](http://runcloud.io/)
 
