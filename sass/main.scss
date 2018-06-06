@@ -1,45 +1,328 @@
 // colors
-$bg-color: #fff;
-$logo-color: #000;
+$bg-color: #3d4051;
+$cloud-color: #fff;
+
+// image
+$star-bg: "http://www.script-tutorials.com/demos/360/images/stars.png";
+
+// fonts
+@import url("https://fonts.googleapis.com/css?family=Nunito:400,900i");
+$nunito-font: 'Nunito', sans-serif;
+
+// sizes
+$body-padding: 20%;
+$cloudbase-width: 500px;
+$cloudbase-height: 150px;
+$cloudbase-border-radius: 100px;
+$cloudtop1-size: 200px;
+$cloudtop2-size: 250px;
+$cloud-line-height: 25px;
+$cloud-line-border-radius: 15px;
+$cloud-line-margin: -210px;
 
 // mixins
-@mixin center {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    margin: auto;
+@mixin center{
+  display: flex;
+  justify-content: center;
 }
-
-@mixin pseudo($position: absolute, $content: "") {
+@mixin pseudo($position: absolute, $content: ""){
     content: $content;
     position: $position;
 }
-
+@mixin full-screen{
+  top:0;
+  left:0;
+  right:0;
+  bottom:0;
+  position:absolute;
+}
 @mixin breakpoint($point) {
-    @if $point==tablet {
-        @media (max-width: 1024px) and (min-width: 768px) {
-            @content ;
-        }
-    }
-    @else if $point==mobile {
-        @media (max-width: 480px) and (min-width: 320px) {
-            @content ;
-        }
-    }
+  @if $point == tablet {
+     @media (max-width: 768px) and (min-width: 481px) { @content ; }
+  }
+  @else if $point == mobile {
+     @media (max-width: 480px)  { @content ; }
+  }
 }
+@mixin cloud($size,$top){
+  width: $size;
+  height: $size;
+  top: $top;
+  border-radius: $size;
+  background: $cloud-color;
+  z-index: -1;
 
-html, body{
-  width: 100%;
-  height: 100%;
+  @include breakpoint(mobile)
+  {
+     width: $size/3 !important;
+     height: $size/3 !important;
+     top: $top/3 !important;
+  }
+
+  @include breakpoint(tablet)
+  {
+    width: $size/1.5 !important;
+    height: $size/1.5 !important;
+    top: $top/1.5 !important;
+  }
 }
-
-body{
+@mixin line($width,$bg-color,$margin-left){
+  width: $width;
+  height: $cloud-line-height;
   background: $bg-color;
-  overflow: hidden;
+  border-radius: $cloud-line-border-radius;
+  margin-left: $margin-left;
+  z-index: 1;
+
+  @include breakpoint(mobile)
+  {
+    width: $width/3 !important;
+    height: $cloud-line-height/3 !important;
+    border-radius: $cloud-line-border-radius/3 !important;
+    margin-left: $margin-left/3 !important;
+  }
+
+  @include breakpoint(tablet)
+  {
+    width: $width/1.5 !important;
+    height: $cloud-line-height/1.5 !important;
+    border-radius: $cloud-line-border-radius/1.5 !important;
+    margin-left: $margin-left/1.5 !important;
+  }
+}
+
+/*--------------------------------------------*/
+body{
+  @include center;
+  margin-top: $body-padding;
+  background: $bg-color;
+
+  @include breakpoint(mobile)
+  {
+     margin-top: 60%;
+  }
+  @include breakpoint(tablet)
+  {
+     margin-top: 45%;
+  }
+}
+
+.stars {
+  @include full-screen;
+  background:url($star-bg) repeat top center;
 }
 
 .logo{
-  @include center;
+   .cloud{
+     width: $cloudbase-width;
+     height: $cloudbase-height;
+     background: $cloud-color;
+     border-radius: $cloudbase-border-radius;
+     position: relative;
+
+     @include breakpoint(mobile)
+     {
+        width: $cloudbase-width/3 !important;
+        height: $cloudbase-height/3 !important;
+        border-radius: $cloudbase-border-radius/3 !important;
+     }
+     @include breakpoint(tablet)
+     {
+        width: $cloudbase-width/1.5 !important;
+        height: $cloudbase-height/1.5 !important;
+        border-radius: $cloudbase-border-radius/1.5 !important;
+     }
+
+     &::after{
+       @include pseudo;
+       @include cloud($cloudtop1-size,-80px);
+       left: 60px;
+
+       @include breakpoint(mobile)
+       {
+          left: 30px;
+       }
+       @include breakpoint(tablet)
+       {
+          left: 35px;
+       }
+     }
+
+     &::before{
+       @include pseudo;
+       @include cloud($cloudtop2-size,-105px);
+       right: 80px;
+
+       @include breakpoint(mobile)
+       {
+         right: 10px;
+       }
+       @include breakpoint(tablet)
+       {
+         right: 45px;
+       }
+     }
+   }
+
+   .line-1{
+     @include line(90px,$cloud-color,360px);
+     position: absolute;
+     margin-top: $cloud-line-margin;
+     z-index: 1;
+
+     @include breakpoint(mobile)
+     {
+        margin-top: $cloud-line-margin/3 !important;
+        margin-left: 360px/3 + 10 !important;
+     }
+     @include breakpoint(tablet)
+     {
+        margin-top: $cloud-line-margin/1.5 !important;
+     }
+
+     &::after{
+      @include pseudo;
+      @include line(80px,$cloud-color,110px);
+     }
+   }
+
+   .line-2{
+     @include line(100px,$bg-color,370px);
+     position: absolute;
+     margin-top: $cloud-line-margin+($cloud-line-height*1);
+
+     @include breakpoint(mobile)
+     {
+        margin-top: ($cloud-line-margin+($cloud-line-height*1))/3 !important;
+        margin-left: 370px/3 + 10 !important;
+     }
+     @include breakpoint(tablet)
+     {
+        margin-top: ($cloud-line-margin+($cloud-line-height*1))/1.5 !important;
+     }
+   }
+
+   .line-3{
+     @include line(100px,$cloud-color,400px);
+     position: absolute;
+     margin-top: $cloud-line-margin+($cloud-line-height*2);
+
+     @include breakpoint(mobile)
+     {
+        margin-top: ($cloud-line-margin+($cloud-line-height*2))/3 !important;
+     }
+     @include breakpoint(tablet)
+     {
+        margin-top: ($cloud-line-margin+($cloud-line-height*2))/1.5 !important;
+     }
+
+     &::before{
+      @include pseudo;
+      @include line(25px,$cloud-color,120px);
+     }
+
+     &::after{
+      @include pseudo;
+      @include line(60px,$cloud-color,170px);
+     }
+   }
+
+   .line-4{
+     @include line(150px,$bg-color,390px);
+     position: absolute;
+     margin-top: $cloud-line-margin+($cloud-line-height*3);
+
+     @include breakpoint(mobile)
+     {
+        margin-top: ($cloud-line-margin+($cloud-line-height*3))/3 !important;
+        margin-left: 390px/3 + 10 !important;
+     }
+     @include breakpoint(tablet)
+     {
+        margin-top: ($cloud-line-margin+($cloud-line-height*3))/1.5 !important;
+     }
+   }
+
+   .line-5{
+     @include line(250px,$cloud-color,370px);
+     position: absolute;
+     margin-top: $cloud-line-margin+($cloud-line-height*4);
+
+     @include breakpoint(mobile)
+     {
+        margin-top: ($cloud-line-margin+($cloud-line-height*4))/3 !important;
+     }
+     @include breakpoint(tablet)
+     {
+        margin-top: ($cloud-line-margin+($cloud-line-height*4))/1.5 !important;
+     }
+   }
+
+   .line-6{
+     @include line(150px,$bg-color,420px);
+     position: absolute;
+     margin-top: $cloud-line-margin+($cloud-line-height*5);
+
+     @include breakpoint(mobile)
+     {
+        margin-top: ($cloud-line-margin+($cloud-line-height*5))/3 !important;
+        margin-left: 420px/3 + 10 !important;
+     }
+     @include breakpoint(tablet)
+     {
+        margin-top: ($cloud-line-margin+($cloud-line-height*5))/1.5 !important;
+     }
+   }
+
+   .line-7{
+     @include line(200px,$cloud-color,370px);
+     position: absolute;
+     margin-top: $cloud-line-margin+($cloud-line-height*6);
+
+     @include breakpoint(mobile)
+     {
+        margin-top: ($cloud-line-margin+($cloud-line-height*6))/3 !important;
+     }
+     @include breakpoint(tablet)
+     {
+        margin-top: ($cloud-line-margin+($cloud-line-height*6))/1.5 !important;
+     }
+   }
+}
+
+.title{
+  position: absolute;
+  margin-top: 100px;
+  margin-left: 40px;
+
+  @include breakpoint(mobile)
+  {
+     margin-top: 50px;
+     margin-left: 5px;
+  }
+
+  @include breakpoint(tablet)
+  {
+    margin-top: 80px;
+    margin-left: 5px;
+  }
+
+  h1{
+    color: $cloud-color;
+    text-transform: uppercase;
+    font-family: $nunito-font;
+    font-style: italic;
+    font-weight: 1000;
+    font-size: 150px;
+    transform: scale(1) rotate(0deg) translate(0px, 0px) skew(-10deg, 0deg);
+
+    @include breakpoint(mobile)
+    {
+       font-size: 40px;
+    }
+    @include breakpoint(tablet)
+    {
+      font-size: 85px;
+    }
+  }
 }
